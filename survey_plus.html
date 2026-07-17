@@ -289,9 +289,9 @@
 
   <fieldset>
     <legend>8 · Kickoff options</legend>
-    <label for="kiturl">Kit URL (optional)</label>
-    <input type="text" id="kiturl" placeholder="e.g. https://github.com/you/feed-phil-city-kit — leave empty if you attach the kit or use a Claude Project">
-    <div class="hint">If the kit is on GitHub, the prompt will tell Claude where to fetch it. Otherwise it assumes the kit folder is attached to the chat or lives in your Claude Project.</div>
+    <label for="kiturl">Kit URL</label>
+    <input type="text" id="kiturl" value="https://github.com/culinary-city-experience/feed-phil-city-kit">
+    <div class="hint">Pre-filled with the public kit repo — Claude fetches PLAYBOOK.md, templates, and the Madrid example from there, so nothing needs attaching. Clear this field only if you prefer attaching the kit folder or using a Claude Project.</div>
   </fieldset>
 
 </form>
@@ -478,6 +478,10 @@ function loadForm(){
 }
 document.getElementById('survey').addEventListener('input', saveForm);
 loadForm();
+// If autosave restored an empty Kit URL (e.g. saved before hosting existed),
+// fall back to the public repo so the Claude path stays attachment-free.
+if(!val('kiturl')) document.getElementById('kiturl').value =
+  'https://github.com/culinary-city-experience/feed-phil-city-kit';
 </script>
 </body>
 </html>
