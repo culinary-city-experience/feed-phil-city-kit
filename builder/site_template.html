@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Somebody Feed Phil — City Guide</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+  :root{
+    --cream:#FAF5EC; --paper:#FFFDF8; --ink:#2B2118; --muted:#7A6C5D;
+    --tomato:#C0392B; --mustard:#E3A72F; --line:#E7DDCC;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--cream); color:var(--ink); font:16px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  a{color:var(--tomato);}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 18px;}
+
+  header.hero{background:linear-gradient(160deg,#C0392B 0%,#A93226 55%,#8E2B20 100%); color:#FFF8EE; padding:40px 0 30px;}
+  header.hero .wrap{display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 18px;}
+  .kicker{font-size:13px; letter-spacing:.18em; text-transform:uppercase; opacity:.85; width:100%;}
+  h1{font-family:Georgia,'Times New Roman',serif; font-size:clamp(30px,5vw,46px); font-weight:700;}
+  .sub{font-size:17px; opacity:.92; width:100%; max-width:720px; margin-top:8px;}
+  .hero-meta{margin-top:14px; font-size:14px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); border-radius:10px; padding:10px 14px; width:100%;}
+
+  nav.bar{position:sticky; top:0; z-index:1200; background:var(--paper); border-bottom:1px solid var(--line); box-shadow:0 1px 6px rgba(43,33,24,.06);}
+  nav.bar .wrap{display:flex; gap:6px; overflow-x:auto; padding:10px 18px;}
+  nav.bar a{white-space:nowrap; text-decoration:none; font-size:13.5px; font-weight:600; color:var(--ink); padding:6px 12px; border-radius:999px; border:1px solid var(--line); background:#fff;}
+  nav.bar a:hover{background:var(--cream);}
+  nav.bar a .dot{display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px;}
+
+  section{padding:34px 0 8px;}
+  h2{font-family:Georgia,serif; font-size:26px; margin-bottom:6px;}
+  .lede{color:var(--muted); max-width:760px; margin-bottom:18px;}
+
+  #overview-map{height:520px; border-radius:14px; border:1px solid var(--line); box-shadow:0 6px 24px rgba(43,33,24,.10);}
+  .legend{display:flex; flex-wrap:wrap; gap:10px 22px; margin:12px 2px 4px; font-size:14px;}
+  .legend span .dot{display:inline-block; width:11px; height:11px; border-radius:50%; margin-right:6px;}
+
+  .stroll{background:#EEF3EA; border:1px solid #D8E3CF; border-radius:10px; padding:11px 14px; margin:8px 0 4px; font-size:14.5px; color:#44513C; max-width:920px;}
+  .stroll b{color:#2E5B33;}
+  .group-h{display:flex; align-items:center; gap:10px; margin:34px 0 4px;}
+  .group-h .swatch{width:14px; height:14px; border-radius:4px;}
+  .group-h h3{font-family:Georgia,serif; font-size:21px;}
+
+  .card{background:var(--paper); border:1px solid var(--line); border-radius:14px; margin:16px 0; overflow:hidden; box-shadow:0 3px 14px rgba(43,33,24,.06);}
+  .card-grid{display:grid; grid-template-columns:1fr 300px; gap:0;}
+  @media(max-width:820px){.card-grid{grid-template-columns:1fr;}}
+  .card-body{padding:20px 22px;}
+  .card-map{min-height:240px; position:relative; border-left:1px solid var(--line);}
+  @media(max-width:820px){.card-map{height:230px; border-left:none; border-top:1px solid var(--line);}}
+  .mini-map{position:absolute; inset:0;}
+  .card h4{font-family:Georgia,serif; font-size:21px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .badge{display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; border-radius:50%; color:#fff; font:700 13px/1 Arial; padding:0 4px;}
+  .tagline{color:var(--muted); font-style:italic; margin:2px 0 10px;}
+  .phil{background:#FBF0DC; border-left:4px solid var(--mustard); padding:10px 12px; border-radius:0 8px 8px 0; margin:10px 0; font-size:15px;}
+  .phil b{color:#8A5A00;}
+  .facts{list-style:none; margin:10px 0; font-size:14.6px;}
+  .facts li{padding:3px 0; display:flex; gap:8px;}
+  .facts .ico{width:20px; text-align:center; flex:none;}
+  .status{display:inline-block; font-size:13.5px; font-weight:600; border-radius:8px; padding:5px 10px; margin:6px 0;}
+  .status.ok{background:#E8F3E4; color:#2E6B2E; border:1px solid #CBE3C4;}
+  .status.warn{background:#FCEFE3; color:#9A4E00; border:1px solid #F2D9BC;}
+  .agenda-chip{font-size:13px; color:#5B4A8A; background:#EFEAF8; border:1px solid #DCD2F0; border-radius:8px; padding:4px 9px; display:inline-block; margin:4px 0;}
+
+  .transit{background:#F3F6F4; border:1px solid #DDE7E0; border-radius:10px; padding:12px 14px; margin:12px 0; font-size:14px;}
+  .transit .th{font-weight:700; margin-bottom:6px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px;}
+  .transit .leave{color:var(--tomato); font-weight:700;}
+  .step{display:flex; gap:8px; padding:2.5px 0; align-items:baseline;}
+  .lpill{flex:none; font:700 11.5px/1 Arial; color:#fff; border-radius:5px; padding:4px 7px; min-width:30px; text-align:center;}
+  .step .dur{margin-left:auto; color:var(--muted); font-size:13px; flex:none;}
+
+  .btns{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
+  .btn{text-decoration:none; font-size:13.5px; font-weight:600; padding:8px 13px; border-radius:9px; border:1.5px solid var(--tomato); color:var(--tomato); background:#fff;}
+  .btn:hover{background:var(--tomato); color:#fff;}
+  .btn.primary{background:var(--tomato); color:#fff;}
+  .btn.primary:hover{filter:brightness(1.1);}
+  .btn.ghost{border-color:var(--line); color:var(--ink);}
+
+  .infobox{background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:20px 22px; margin:14px 0;}
+  .infobox h3{font-family:Georgia,serif; margin-bottom:8px;}
+  .infobox ul{margin:8px 0 4px 20px;}
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media(max-width:820px){.cols{grid-template-columns:1fr;}}
+
+  footer{padding:30px 0 50px; color:var(--muted); font-size:13.5px;}
+  footer a{color:var(--muted);}
+  .leaflet-container{font:inherit;}
+  .numicon{display:flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; color:#fff; font:700 13px/1 Arial; border:2.5px solid #fff; box-shadow:0 1px 5px rgba(0,0,0,.4);}
+  .hotelicon{display:flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:#2B2118; color:#FFD766; font-size:17px; border:3px solid #fff; box-shadow:0 1px 6px rgba(0,0,0,.45);}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker" id="hero-kicker"></div>
+    <h1 id="hero-title"></h1>
+    <div class="sub" id="hero-sub"></div>
+    <div class="hero-meta" id="hero-meta"></div>
+  </div>
+</header>
+
+<nav class="bar"><div class="wrap" id="navlinks"></div></nav>
+
+<section id="map-section">
+  <div class="wrap">
+    <h2>The Overview Map</h2>
+    <p class="lede">Star = your base. Numbered pins = Phil's stops, coloured by neighbourhood. Click any pin for quick links.</p>
+    <div id="overview-map"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+</section>
+
+<section id="venues">
+  <div class="wrap" id="venue-cards"></div>
+</section>
+
+<section id="practical">
+  <div class="wrap">
+    <h2>Practical Bits</h2>
+    <div class="cols" id="practical-boxes"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" id="site-foot"></div>
+</footer>
+
+<script>
+/*__DATA__*/
+
+document.title = CITY.title + " — Somebody Feed Phil";
+function gmaps(v){
+  return "https://www.google.com/maps/dir/?api=1&origin=" + encodeURIComponent(CITY.origin) +
+         "&destination=" + encodeURIComponent(v.address.split("—")[0].split("⚠")[0].trim()) + "&travelmode=transit";
+}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+
+// ---- hero (base_note and boxes may contain HTML on purpose — authored in city.js)
+document.getElementById("hero-kicker").textContent = CITY.kicker;
+document.getElementById("hero-title").textContent = CITY.title;
+document.getElementById("hero-sub").textContent = CITY.subtitle;
+document.getElementById("hero-meta").innerHTML = CITY.base_note;
+
+// ---- nav + legend
+const nav = document.getElementById("navlinks");
+nav.innerHTML = '<a href="#map-section">🗺 Map</a>' + VENUES.map(v=>{
+  const c = GROUPS[v.group].color;
+  return `<a href="#${v.id}"><span class="dot" style="background:${c}"></span>${v.num}. ${esc(v.name)}</a>`;
+}).join("") + '<a href="#practical">ℹ Practical</a>';
+
+document.getElementById("legend").innerHTML =
+  `<span><span class="dot" style="background:#2B2118"></span>★ ${esc(CITY.hotel_legend)}</span>` +
+  Object.values(GROUPS).map(g=>`<span><span class="dot" style="background:${g.color}"></span>${g.label}</span>`).join("");
+
+// ---- venue cards
+const holder = document.getElementById("venue-cards");
+let lastGroup = null, html = "";
+VENUES.forEach(v=>{
+  const g = GROUPS[v.group];
+  if(v.group !== lastGroup){
+    html += `<div class="group-h"><span class="swatch" style="background:${g.color}"></span><h3>${g.label}</h3></div>`;
+    html += `<div class="stroll"><b>Wander here:</b> ${esc(g.stroll)}</div>`;
+    lastGroup = v.group;
+  }
+  const steps = v.transit.steps.map(s=>{
+    const col = LINE_PILL_COLORS[s[0]] || "#8B8378";
+    const lbl = s[0]==="walk" ? "🚶" : s[0];
+    return `<div class="step"><span class="lpill" style="background:${col}">${lbl}</span><span>${esc(s[1])}</span><span class="dur">${s[2]}</span></div>`;
+  }).join("");
+  const links = v.links.map(l=>`<a class="btn ghost" href="${l[1]}" target="_blank">${esc(l[0])}</a>`).join("");
+  const agenda = v.agenda ? `<span class="agenda-chip">🗓 ${esc(v.agenda)}</span>` : "";
+  html += `
+  <div class="card" id="${v.id}">
+    <div class="card-grid">
+      <div class="card-body">
+        <h4><span class="badge" style="background:${g.color}">${v.num}</span>${esc(v.name)}</h4>
+        <div class="tagline">${esc(v.tagline)}</div>
+        <div class="phil"><b>What Phil had:</b> ${esc(v.phil)}</div>
+        <ul class="facts">
+          <li><span class="ico">📍</span><span>${esc(v.address)}</span></li>
+          <li><span class="ico">📞</span><span>${v.phone==="—" ? "—" : `<a href="tel:${v.phone.replace(/[^+\d]/g,"").slice(0,14)}">${v.phone}</a>`}</span></li>
+          <li><span class="ico">💶</span><span>${esc(v.price)}</span></li>
+          <li><span class="ico">🕑</span><span>${esc(v.hours)}</span></li>
+        </ul>
+        <span class="status ${v.status.ok ? "ok" : "warn"}">${esc(v.status.text)}</span><br>
+        ${agenda}
+        <div class="transit">
+          <div class="th"><span>🚇 ${esc(CITY.from_label)} — ${esc(CITY.arrive_label)}</span><span class="leave">Leave ${esc(v.transit.leave)}</span></div>
+          ${steps}
+          <div style="margin-top:6px; color:var(--muted);">${esc(v.transit.total)}</div>
+        </div>
+        <div class="btns">
+          <a class="btn primary" href="${gmaps(v)}" target="_blank">🧭 Route (live)</a>
+          ${links}
+        </div>
+      </div>
+      <div class="card-map"><div class="mini-map" id="mini-${v.id}"></div></div>
+    </div>
+  </div>`;
+});
+holder.innerHTML = html;
+
+// ---- practical boxes + footer (HTML authored in city.js)
+document.getElementById("practical-boxes").innerHTML = TEXT.site_practical_boxes.map(b=>
+  `<div class="infobox"><h3>${b.title}</h3><ul>${b.items.map(i=>`<li>${i}</li>`).join("")}</ul></div>`).join("");
+document.getElementById("site-foot").innerHTML = TEXT.site_foot;
+
+// ---- maps (guarded: cards above still work offline / if the CDN is unreachable)
+try{
+  if(typeof L === "undefined") throw new Error("Leaflet not loaded");
+  const map = L.map("overview-map", {scrollWheelZoom:false});
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
+  const hotelMarker = L.marker(HOTEL.coords, {icon: L.divIcon({className:"", html:'<div class="hotelicon">★</div>', iconSize:[34,34], iconAnchor:[17,17]})}).addTo(map);
+  hotelMarker.bindPopup(`<b>${HOTEL.name}</b><br>${HOTEL.address}<br><small>${HOTEL.stations}</small>`);
+  const bounds = [HOTEL.coords];
+  VENUES.forEach(v=>{
+    const c = GROUPS[v.group].color;
+    const m = L.marker(v.coords, {icon: L.divIcon({className:"", html:`<div class="numicon" style="background:${c}">${v.num}</div>`, iconSize:[28,28], iconAnchor:[14,14]})}).addTo(map);
+    m.bindPopup(`<b>${v.num}. ${esc(v.name)}</b><br>${esc(v.address)}<br><a href="#${v.id}">Details ↓</a> · <a href="${gmaps(v)}" target="_blank">Route</a>`);
+    bounds.push(v.coords);
+  });
+  map.fitBounds(bounds, {padding:[36,36]});
+
+  // wander-maps: interactive, zoomed to neighbourhood level
+  VENUES.forEach(v=>{
+    const g = GROUPS[v.group];
+    const mm = L.map("mini-"+v.id, {zoomControl:true, dragging:true, scrollWheelZoom:false, doubleClickZoom:true, touchZoom:true, attributionControl:false});
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(mm);
+    mm.setView(v.coords, 15);
+    L.marker(v.coords, {icon: L.divIcon({className:"", html:`<div class="numicon" style="background:${g.color}">${v.num}</div>`, iconSize:[28,28], iconAnchor:[14,14]})}).addTo(mm);
+  });
+}catch(err){
+  document.getElementById("overview-map").innerHTML =
+    '<div style="padding:40px 20px; text-align:center; color:#7A6C5D;">Maps need an internet connection — everything else in this guide works offline.<br>Use the <b>Route</b> buttons or the PDF\'s schematic maps instead.</div>';
+  document.getElementById("overview-map").style.height = "auto";
+  document.querySelectorAll(".card-map").forEach(el=>{ el.style.display = "none"; });
+}
+</script>
+</body>
+</html>

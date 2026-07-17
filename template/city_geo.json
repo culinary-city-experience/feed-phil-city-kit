@@ -1,0 +1,36 @@
+{
+  "_readme": "Blank starting skeleton. See ../example-madrid/city_geo.json for a complete filled-in example, and SCHEMA.md for field docs. Delete this _readme key before building (it's ignored by the builder either way).",
+
+  "line_colors": {},
+
+  "stations": {},
+
+  "transit_lines": [],
+
+  "annotations": [],
+
+  "streets": {},
+
+  "landmarks": {},
+
+  "parks": {},
+
+  "neighbourhoods": [],
+
+  "overview": {
+    "bounds": [0.0, 0.0, 0.0, 0.0],
+    "width": 760,
+    "scale_m": 1000,
+    "hotel_label": "Your base",
+    "hotel_label_anchor": "start",
+    "parks": [],
+    "street_layers": [],
+    "station_labels": {},
+    "station_skip": [],
+    "landmark_labels": {},
+    "venue_labels": {},
+    "venue_display_offsets": {}
+  },
+
+  "areas": {}
+}

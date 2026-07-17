@@ -1,0 +1,1451 @@
+{
+ "line_colors": {
+  "L1": "#2FA8E0",
+  "L2": "#DB1E36",
+  "L3": "#F5C400",
+  "L4": "#824100",
+  "L5": "#96BF0D",
+  "L6": "#8A8A8A",
+  "L7": "#F3721C",
+  "L8": "#F49FC3",
+  "L9": "#A60084",
+  "L10": "#005AA9"
+ },
+ "stations": {
+  "Colombia": {
+   "lines": [
+    "L8",
+    "L9"
+   ],
+   "lat": 40.4574,
+   "lon": -3.6774
+  },
+  "Pío XII": {
+   "lines": [
+    "L9"
+   ],
+   "lat": 40.4638,
+   "lon": -3.6749
+  },
+  "Concha Espina": {
+   "lines": [
+    "L9"
+   ],
+   "lat": 40.45,
+   "lon": -3.679
+  },
+  "Cruz del Rayo": {
+   "lines": [
+    "L9"
+   ],
+   "lat": 40.4444,
+   "lon": -3.678
+  },
+  "Av. de América": {
+   "lines": [
+    "L4",
+    "L6",
+    "L7",
+    "L9"
+   ],
+   "lat": 40.438,
+   "lon": -3.6773
+  },
+  "Núñez de Balboa": {
+   "lines": [
+    "L5",
+    "L9"
+   ],
+   "lat": 40.4331,
+   "lon": -3.6855
+  },
+  "Gregorio Marañón": {
+   "lines": [
+    "L7",
+    "L10"
+   ],
+   "lat": 40.4374,
+   "lon": -3.6903
+  },
+  "Alonso Cano": {
+   "lines": [
+    "L7"
+   ],
+   "lat": 40.4396,
+   "lon": -3.6975
+  },
+  "Ríos Rosas": {
+   "lines": [
+    "L1"
+   ],
+   "lat": 40.4423,
+   "lon": -3.7003
+  },
+  "Rubén Darío": {
+   "lines": [
+    "L5"
+   ],
+   "lat": 40.4331,
+   "lon": -3.69
+  },
+  "Alonso Martínez": {
+   "lines": [
+    "L4",
+    "L5",
+    "L10"
+   ],
+   "lat": 40.4276,
+   "lon": -3.6963
+  },
+  "Chueca": {
+   "lines": [
+    "L5"
+   ],
+   "lat": 40.4225,
+   "lon": -3.6976
+  },
+  "Gran Vía": {
+   "lines": [
+    "L1",
+    "L5"
+   ],
+   "lat": 40.4199,
+   "lon": -3.7018
+  },
+  "Callao": {
+   "lines": [
+    "L3",
+    "L5"
+   ],
+   "lat": 40.42,
+   "lon": -3.7059
+  },
+  "Ópera": {
+   "lines": [
+    "L2",
+    "L5"
+   ],
+   "lat": 40.4183,
+   "lon": -3.7093
+  },
+  "La Latina": {
+   "lines": [
+    "L5"
+   ],
+   "lat": 40.4087,
+   "lon": -3.7092
+  },
+  "Sol": {
+   "lines": [
+    "L1",
+    "L2",
+    "L3"
+   ],
+   "lat": 40.4169,
+   "lon": -3.7035
+  },
+  "Sevilla": {
+   "lines": [
+    "L2"
+   ],
+   "lat": 40.4186,
+   "lon": -3.7003
+  },
+  "Serrano": {
+   "lines": [
+    "L4"
+   ],
+   "lat": 40.4245,
+   "lon": -3.6885
+  },
+  "Velázquez": {
+   "lines": [
+    "L4"
+   ],
+   "lat": 40.4247,
+   "lon": -3.6842
+  },
+  "Tirso de Molina": {
+   "lines": [
+    "L1"
+   ],
+   "lat": 40.4123,
+   "lon": -3.7043
+  },
+  "Iglesia": {
+   "lines": [
+    "L1"
+   ],
+   "lat": 40.4325,
+   "lon": -3.6987
+  },
+  "Quevedo": {
+   "lines": [
+    "L2"
+   ],
+   "lat": 40.434,
+   "lon": -3.704
+  }
+ },
+ "transit_lines": [
+  {
+   "line": "L9",
+   "path": [
+    "Pío XII",
+    "Colombia",
+    "Concha Espina",
+    "Cruz del Rayo",
+    "Av. de América",
+    "Núñez de Balboa"
+   ]
+  },
+  {
+   "line": "L7",
+   "path": [
+    "Av. de América",
+    "Gregorio Marañón",
+    "Alonso Cano"
+   ]
+  },
+  {
+   "line": "L5",
+   "path": [
+    "Núñez de Balboa",
+    "Rubén Darío",
+    "Alonso Martínez",
+    "Chueca",
+    "Gran Vía",
+    "Callao",
+    "Ópera",
+    "La Latina"
+   ]
+  }
+ ],
+ "annotations": [
+  {
+   "from_station": "Colombia",
+   "dx": 56,
+   "dy": -34,
+   "color": "#F49FC3",
+   "label": "L8 → Airport T4",
+   "label_dx": 62,
+   "label_dy": -14,
+   "label_anchor": "end",
+   "label_color": "#C4708F"
+  }
+ ],
+ "streets": {
+  "castellana": {
+   "name": "Paseo de la Castellana",
+   "path": [
+    [
+     40.4669,
+     -3.688
+    ],
+    [
+     40.462,
+     -3.6897
+    ],
+    [
+     40.453,
+     -3.689
+    ],
+    [
+     40.446,
+     -3.692
+    ],
+    [
+     40.4374,
+     -3.6903
+    ],
+    [
+     40.4331,
+     -3.69
+    ],
+    [
+     40.4254,
+     -3.689
+    ],
+    [
+     40.4193,
+     -3.6932
+    ],
+    [
+     40.4152,
+     -3.6942
+    ],
+    [
+     40.4085,
+     -3.692
+    ]
+   ]
+  },
+  "granvia": {
+   "name": "Gran Vía",
+   "path": [
+    [
+     40.4203,
+     -3.7118
+    ],
+    [
+     40.42,
+     -3.7059
+    ],
+    [
+     40.4198,
+     -3.7011
+    ]
+   ]
+  },
+  "alcala": {
+   "name": "C. de Alcalá",
+   "path": [
+    [
+     40.4155,
+     -3.7122
+    ],
+    [
+     40.4169,
+     -3.7035
+    ],
+    [
+     40.4186,
+     -3.7003
+    ],
+    [
+     40.4193,
+     -3.6932
+    ],
+    [
+     40.42,
+     -3.6889
+    ],
+    [
+     40.426,
+     -3.674
+    ]
+   ]
+  },
+  "mayor": {
+   "name": "C. Mayor",
+   "path": [
+    [
+     40.4167,
+     -3.704
+    ],
+    [
+     40.4152,
+     -3.7122
+    ]
+   ]
+  },
+  "serrano": {
+   "name": "C. de Serrano",
+   "path": [
+    [
+     40.42,
+     -3.6893
+    ],
+    [
+     40.437,
+     -3.6862
+    ]
+   ]
+  },
+  "pvergara": {
+   "name": "P. de Vergara",
+   "path": [
+    [
+     40.4235,
+     -3.6778
+    ],
+    [
+     40.444,
+     -3.676
+    ],
+    [
+     40.4631,
+     -3.6752
+    ]
+   ]
+  },
+  "joseabascal": {
+   "name": "José Abascal",
+   "path": [
+    [
+     40.4368,
+     -3.704
+    ],
+    [
+     40.4374,
+     -3.6903
+    ]
+   ]
+  },
+  "goya": {
+   "name": "C. de Goya",
+   "path": [
+    [
+     40.4249,
+     -3.689
+    ],
+    [
+     40.424,
+     -3.67
+    ]
+   ]
+  },
+  "habana": {
+   "name": "P. de la Habana",
+   "path": [
+    [
+     40.45,
+     -3.689
+    ],
+    [
+     40.46,
+     -3.6812
+    ],
+    [
+     40.4655,
+     -3.6758
+    ]
+   ]
+  },
+  "alcocer": {
+   "name": "Alberto Alcocer",
+   "path": [
+    [
+     40.46,
+     -3.689
+    ],
+    [
+     40.4608,
+     -3.6755
+    ]
+   ]
+  },
+  "arenal": {
+   "name": "C. del Arenal",
+   "path": [
+    [
+     40.417,
+     -3.7042
+    ],
+    [
+     40.4181,
+     -3.7089
+    ]
+   ]
+  },
+  "toledo": {
+   "name": "C. de Toledo",
+   "path": [
+    [
+     40.4148,
+     -3.7074
+    ],
+    [
+     40.408,
+     -3.71
+    ]
+   ]
+  },
+  "cavabaja": {
+   "name": "Cava Baja",
+   "path": [
+    [
+     40.413,
+     -3.7088
+    ],
+    [
+     40.4108,
+     -3.7077
+    ]
+   ]
+  },
+  "huertas": {
+   "name": "C. de las Huertas",
+   "path": [
+    [
+     40.4143,
+     -3.7017
+    ],
+    [
+     40.4113,
+     -3.6935
+    ]
+   ]
+  },
+  "sanjeronimo": {
+   "name": "Carrera de S. Jerónimo",
+   "path": [
+    [
+     40.4166,
+     -3.703
+    ],
+    [
+     40.4152,
+     -3.696
+    ]
+   ]
+  },
+  "ayala": {
+   "name": "C. de Ayala",
+   "path": [
+    [
+     40.4275,
+     -3.695
+    ],
+    [
+     40.4266,
+     -3.679
+    ]
+   ]
+  },
+  "jorgejuan": {
+   "name": "C. de Jorge Juan",
+   "path": [
+    [
+     40.4235,
+     -3.695
+    ],
+    [
+     40.4227,
+     -3.679
+    ]
+   ]
+  },
+  "velazquez_st": {
+   "name": "C. de Velázquez",
+   "path": [
+    [
+     40.422,
+     -3.685
+    ],
+    [
+     40.434,
+     -3.6828
+    ]
+   ]
+  },
+  "lagasca": {
+   "name": "C. de Lagasca",
+   "path": [
+    [
+     40.422,
+     -3.6869
+    ],
+    [
+     40.434,
+     -3.6847
+    ]
+   ]
+  },
+  "ponzano_st": {
+   "name": "C. de Ponzano",
+   "path": [
+    [
+     40.4366,
+     -3.6998
+    ],
+    [
+     40.4434,
+     -3.6986
+    ]
+   ]
+  },
+  "alonsocano_st": {
+   "name": "C. de Alonso Cano",
+   "path": [
+    [
+     40.4366,
+     -3.6981
+    ],
+    [
+     40.4434,
+     -3.6969
+    ]
+   ]
+  },
+  "santaengracia": {
+   "name": "C. de Sta. Engracia",
+   "path": [
+    [
+     40.429,
+     -3.6972
+    ],
+    [
+     40.433,
+     -3.6988
+    ],
+    [
+     40.4445,
+     -3.7038
+    ]
+   ]
+  },
+  "breton": {
+   "name": "Bretón de los Herreros",
+   "path": [
+    [
+     40.439,
+     -3.704
+    ],
+    [
+     40.4396,
+     -3.692
+    ]
+   ]
+  },
+  "riosrosas_st": {
+   "name": "C. de Ríos Rosas",
+   "path": [
+    [
+     40.442,
+     -3.704
+    ],
+    [
+     40.4426,
+     -3.692
+    ]
+   ]
+  },
+  "espronceda_st": {
+   "name": "C. de Espronceda",
+   "path": [
+    [
+     40.4411,
+     -3.701
+    ],
+    [
+     40.4419,
+     -3.692
+    ]
+   ]
+  },
+  "prado_st": {
+   "name": "C. del Prado",
+   "path": [
+    [
+     40.4146,
+     -3.7003
+    ],
+    [
+     40.415,
+     -3.6955
+    ]
+   ]
+  },
+  "conchaespina_st": {
+   "name": "C. de Concha Espina",
+   "path": [
+    [
+     40.4508,
+     -3.6885
+    ],
+    [
+     40.4495,
+     -3.675
+    ]
+   ]
+  },
+  "claudiocoello": {
+   "name": null,
+   "path": [
+    [
+     40.422,
+     -3.6879
+    ],
+    [
+     40.4338,
+     -3.6858
+    ]
+   ]
+  },
+  "hermosilla": {
+   "name": null,
+   "path": [
+    [
+     40.4262,
+     -3.695
+    ],
+    [
+     40.4253,
+     -3.679
+    ]
+   ]
+  },
+  "montera": {
+   "name": null,
+   "path": [
+    [
+     40.4169,
+     -3.7035
+    ],
+    [
+     40.4198,
+     -3.7014
+    ]
+   ]
+  }
+ },
+ "landmarks": {
+  "sol": {
+   "label": "Puerta del Sol",
+   "lat": 40.4169,
+   "lon": -3.7035
+  },
+  "pmayor": {
+   "label": "Plaza Mayor",
+   "lat": 40.4155,
+   "lon": -3.7074
+  },
+  "palacio": {
+   "label": "Palacio Real",
+   "lat": 40.418,
+   "lon": -3.7144
+  },
+  "cibeles": {
+   "label": "Cibeles",
+   "lat": 40.4193,
+   "lon": -3.6932
+  },
+  "palcala": {
+   "label": "Puerta de Alcalá",
+   "lat": 40.42,
+   "lon": -3.6889
+  },
+  "prado": {
+   "label": "Museo del Prado",
+   "lat": 40.4138,
+   "lon": -3.6921
+  },
+  "bernabeu": {
+   "label": "Estadio Bernabéu",
+   "lat": 40.4531,
+   "lon": -3.6884
+  },
+  "atocha": {
+   "label": "Atocha",
+   "lat": 40.4065,
+   "lon": -3.6895
+  },
+  "sorolla": {
+   "label": "Museo Sorolla",
+   "lat": 40.4354,
+   "lon": -3.6924
+  },
+  "olavide": {
+   "label": "Pl. de Olavide",
+   "lat": 40.4323,
+   "lon": -3.7003
+  },
+  "mchamartin": {
+   "label": "Mercado de Chamartín",
+   "lat": 40.4602,
+   "lon": -3.6738
+  },
+  "pcastilla": {
+   "label": "Pl. de Castilla",
+   "lat": 40.4669,
+   "lon": -3.688
+  },
+  "santaana": {
+   "label": "Pl. de Santa Ana",
+   "lat": 40.4146,
+   "lon": -3.7008
+  },
+  "teatro": {
+   "label": "Teatro Real",
+   "lat": 40.4184,
+   "lon": -3.7109
+  },
+  "cafecentral": {
+   "label": "Café Central (jazz)",
+   "lat": 40.415,
+   "lon": -3.6975
+  },
+  "clamores": {
+   "label": "Sala Clamores (jazz)",
+   "lat": 40.4308,
+   "lon": -3.7022
+  },
+  "eldoble": {
+   "label": "El Doble (cañas)",
+   "lat": 40.441,
+   "lon": -3.6989
+  },
+  "vallehermoso": {
+   "label": "Mercado de Vallehermoso",
+   "lat": 40.436,
+   "lon": -3.7093
+  },
+  "rastro": {
+   "label": "El Rastro (Sun am)",
+   "lat": 40.4095,
+   "lon": -3.7072
+  },
+  "lazaro": {
+   "label": "Museo Lázaro Galdiano",
+   "lat": 40.4362,
+   "lon": -3.6867
+  },
+  "galeria": {
+   "label": "Galería Canalejas",
+   "lat": 40.4174,
+   "lon": -3.6996
+  },
+  "oriente": {
+   "label": "Pl. de Oriente",
+   "lat": 40.4183,
+   "lon": -3.7122
+  }
+ },
+ "parks": {
+  "retiro": {
+   "label": "El Retiro",
+   "lat_min": 40.409,
+   "lat_max": 40.4215,
+   "lon_min": -3.6885,
+   "lon_max": -3.68
+  },
+  "berlin": {
+   "label": "Parque de Berlín",
+   "lat_min": 40.4556,
+   "lat_max": 40.4585,
+   "lon_min": -3.6745,
+   "lon_max": -3.67
+  }
+ },
+ "neighbourhoods": [
+  {
+   "label": "CHAMBERÍ",
+   "lat": 40.4395,
+   "lon": -3.7065
+  },
+  {
+   "label": "SALAMANCA",
+   "lat": 40.4292,
+   "lon": -3.6812
+  },
+  {
+   "label": "MALASAÑA",
+   "lat": 40.4262,
+   "lon": -3.7043
+  },
+  {
+   "label": "CHUECA",
+   "lat": 40.423,
+   "lon": -3.6995
+  },
+  {
+   "label": "LA LATINA",
+   "lat": 40.4102,
+   "lon": -3.7115
+  },
+  {
+   "label": "LAVAPIÉS",
+   "lat": 40.409,
+   "lon": -3.7
+  },
+  {
+   "label": "BARRIO DE LAS LETRAS",
+   "lat": 40.4128,
+   "lon": -3.6978
+  },
+  {
+   "label": "CHAMARTÍN",
+   "lat": 40.4595,
+   "lon": -3.68
+  }
+ ],
+ "overview": {
+  "bounds": [
+   40.4035,
+   40.4695,
+   -3.7195,
+   -3.6645
+  ],
+  "width": 760,
+  "scale_m": 1000,
+  "hotel_label": "Your residence",
+  "hotel_label_anchor": "start",
+  "parks": [
+   "retiro",
+   "berlin"
+  ],
+  "street_layers": [
+   {
+    "keys": [
+     "castellana"
+    ],
+    "width": 9
+   },
+   {
+    "keys": [
+     "granvia",
+     "alcala",
+     "mayor",
+     "serrano",
+     "pvergara",
+     "joseabascal",
+     "goya",
+     "habana",
+     "alcocer",
+     "toledo"
+    ],
+    "width": 5
+   }
+  ],
+  "station_labels": {
+   "Pío XII": [
+    8,
+    -4
+   ],
+   "Colombia": [
+    9,
+    3
+   ],
+   "Av. de América": [
+    9,
+    -5
+   ],
+   "Núñez de Balboa": [
+    9,
+    10
+   ],
+   "Alonso Cano": [
+    -8,
+    -9
+   ],
+   "Gran Vía": [
+    6,
+    12
+   ],
+   "Ópera": [
+    8,
+    12
+   ],
+   "La Latina": [
+    9,
+    8
+   ],
+   "Chueca": [
+    9,
+    4
+   ],
+   "Alonso Martínez": [
+    8,
+    10
+   ],
+   "Rubén Darío": [
+    9,
+    8
+   ],
+   "Gregorio Marañón": [
+    -4,
+    -9
+   ],
+   "Concha Espina": [
+    9,
+    3
+   ],
+   "Cruz del Rayo": [
+    9,
+    3
+   ],
+   "Callao": [
+    -16,
+    -9
+   ]
+  },
+  "station_skip": [
+   "Iglesia",
+   "Quevedo",
+   "Sevilla",
+   "Tirso de Molina",
+   "Velázquez",
+   "Serrano",
+   "Ríos Rosas",
+   "Sol"
+  ],
+  "landmark_labels": {
+   "pmayor": [
+    "start",
+    8,
+    12
+   ],
+   "palacio": [
+    "start",
+    7,
+    13
+   ],
+   "cibeles": [
+    "start",
+    7,
+    10
+   ],
+   "palcala": [
+    "start",
+    7,
+    -5
+   ],
+   "prado": [
+    "start",
+    7,
+    3
+   ],
+   "bernabeu": [
+    "end",
+    -8,
+    3
+   ],
+   "atocha": [
+    "start",
+    7,
+    3
+   ],
+   "sorolla": [
+    "end",
+    -8,
+    3
+   ],
+   "olavide": [
+    "end",
+    -8,
+    -5
+   ],
+   "mchamartin": [
+    "start",
+    7,
+    3
+   ],
+   "pcastilla": [
+    "start",
+    7,
+    -6
+   ],
+   "santaana": [
+    "start",
+    7,
+    9
+   ],
+   "rastro": [
+    "end",
+    -8,
+    4
+   ],
+   "lazaro": [
+    "start",
+    7,
+    3
+   ]
+  },
+  "venue_labels": {
+   "sacha": [
+    -14,
+    -6,
+    "end"
+   ],
+   "ponzano": [
+    -15,
+    4,
+    "end"
+   ],
+   "sala": [
+    15,
+    13,
+    "start"
+   ],
+   "barrera": [
+    13,
+    -4,
+    "start"
+   ],
+   "mo": [
+    13,
+    -4,
+    "start"
+   ],
+   "casadani": [
+    13,
+    3,
+    "start"
+   ],
+   "streetxo": [
+    -13,
+    10,
+    "end"
+   ],
+   "abuelo": [
+    13,
+    4,
+    "start"
+   ],
+   "botin": [
+    -13,
+    10,
+    "end"
+   ],
+   "sangines": [
+    9,
+    -12,
+    "start"
+   ],
+   "sanmiguel": [
+    -13,
+    3,
+    "end"
+   ]
+  },
+  "venue_display_offsets": {
+   "ponzano": [
+    -6,
+    -4
+   ],
+   "sala": [
+    6,
+    4
+   ]
+  }
+ },
+ "areas": {
+  "home": {
+   "bounds": [
+    40.4483,
+    40.4665,
+    -3.6935,
+    -3.6675
+   ],
+   "width": 640,
+   "scale_m": 250,
+   "streets": [
+    "castellana",
+    "pvergara",
+    "habana",
+    "alcocer",
+    "conchaespina_st"
+   ],
+   "label_streets": [
+    "pvergara",
+    "habana",
+    "alcocer",
+    "conchaespina_st"
+   ],
+   "parks": [
+    "berlin"
+   ],
+   "stations": [
+    "Colombia",
+    "Pío XII",
+    "Concha Espina"
+   ],
+   "station_labels": {},
+   "landmarks": {
+    "bernabeu": [
+     "end",
+     -8,
+     3
+    ],
+    "mchamartin": [
+     "start",
+     7,
+     -5
+    ]
+   },
+   "show_hotel": true,
+   "venue_labels": {
+    "sacha": [
+     -14,
+     -8,
+     "end"
+    ]
+   },
+   "venue_display_offsets": {}
+  },
+  "chamberi": {
+   "bounds": [
+    40.4285,
+    40.4445,
+    -3.7115,
+    -3.689
+   ],
+   "width": 640,
+   "scale_m": 250,
+   "streets": [
+    "ponzano_st",
+    "alonsocano_st",
+    "santaengracia",
+    "joseabascal",
+    "breton",
+    "riosrosas_st",
+    "espronceda_st",
+    "castellana"
+   ],
+   "label_streets": [
+    "ponzano_st",
+    "alonsocano_st",
+    "santaengracia",
+    "joseabascal"
+   ],
+   "parks": [],
+   "stations": [
+    "Alonso Cano",
+    "Ríos Rosas",
+    "Gregorio Marañón",
+    "Iglesia",
+    "Quevedo"
+   ],
+   "station_labels": {
+    "Ríos Rosas": [
+     8,
+     -8
+    ]
+   },
+   "landmarks": {
+    "olavide": [
+     "start",
+     7,
+     10
+    ],
+    "clamores": [
+     "start",
+     7,
+     3
+    ],
+    "eldoble": [
+     "start",
+     7,
+     -5
+    ],
+    "vallehermoso": [
+     "start",
+     7,
+     10
+    ],
+    "sorolla": [
+     "end",
+     -8,
+     3
+    ]
+   },
+   "show_hotel": false,
+   "venue_labels": {
+    "ponzano": [
+     -14,
+     4,
+     "end"
+    ],
+    "sala": [
+     14,
+     12,
+     "start"
+    ],
+    "barrera": [
+     13,
+     -6,
+     "start"
+    ],
+    "mo": [
+     13,
+     -4,
+     "start"
+    ]
+   },
+   "venue_display_offsets": {
+    "ponzano": [
+     -7,
+     -5
+    ],
+    "sala": [
+     7,
+     5
+    ]
+   }
+  },
+  "salamanca": {
+   "bounds": [
+    40.4185,
+    40.4318,
+    -3.6978,
+    -3.6778
+   ],
+   "width": 640,
+   "scale_m": 250,
+   "streets": [
+    "serrano",
+    "velazquez_st",
+    "lagasca",
+    "claudiocoello",
+    "goya",
+    "ayala",
+    "jorgejuan",
+    "hermosilla",
+    "alcala",
+    "castellana"
+   ],
+   "label_streets": [
+    "serrano",
+    "velazquez_st",
+    "lagasca",
+    "goya",
+    "ayala",
+    "jorgejuan"
+   ],
+   "parks": [
+    "retiro"
+   ],
+   "stations": [
+    "Serrano",
+    "Velázquez",
+    "Núñez de Balboa"
+   ],
+   "station_labels": {
+    "Núñez de Balboa": [
+     -8,
+     -8
+    ]
+   },
+   "landmarks": {
+    "palcala": [
+     "start",
+     7,
+     -6
+    ],
+    "cibeles": [
+     "start",
+     7,
+     10
+    ]
+   },
+   "show_hotel": false,
+   "venue_labels": {
+    "casadani": [
+     13,
+     -6,
+     "start"
+    ],
+    "streetxo": [
+     -13,
+     12,
+     "end"
+    ]
+   },
+   "venue_display_offsets": {}
+  },
+  "centro": {
+   "bounds": [
+    40.4055,
+    40.4225,
+    -3.7175,
+    -3.6925
+   ],
+   "width": 640,
+   "scale_m": 250,
+   "streets": [
+    "granvia",
+    "mayor",
+    "arenal",
+    "alcala",
+    "toledo",
+    "cavabaja",
+    "huertas",
+    "sanjeronimo",
+    "prado_st",
+    "montera",
+    "castellana"
+   ],
+   "label_streets": [
+    "granvia",
+    "mayor",
+    "arenal",
+    "toledo",
+    "cavabaja",
+    "huertas",
+    "prado_st"
+   ],
+   "parks": [],
+   "stations": [
+    "Sol",
+    "Ópera",
+    "Callao",
+    "Gran Vía",
+    "La Latina",
+    "Tirso de Molina",
+    "Sevilla"
+   ],
+   "station_labels": {
+    "Sol": [
+     8,
+     14
+    ],
+    "Ópera": [
+     -8,
+     -8
+    ]
+   },
+   "landmarks": {
+    "pmayor": [
+     "start",
+     8,
+     13
+    ],
+    "palacio": [
+     "start",
+     7,
+     13
+    ],
+    "santaana": [
+     "start",
+     7,
+     9
+    ],
+    "cafecentral": [
+     "start",
+     7,
+     11
+    ],
+    "teatro": [
+     "end",
+     -8,
+     -6
+    ],
+    "rastro": [
+     "end",
+     -8,
+     8
+    ],
+    "galeria": [
+     "start",
+     7,
+     3
+    ]
+   },
+   "show_hotel": false,
+   "venue_labels": {
+    "abuelo": [
+     12,
+     -6,
+     "start"
+    ],
+    "botin": [
+     -13,
+     4,
+     "end"
+    ],
+    "sangines": [
+     11,
+     -10,
+     "start"
+    ],
+    "sanmiguel": [
+     -13,
+     10,
+     "end"
+    ]
+   },
+   "venue_display_offsets": {}
+  }
+ }
+}

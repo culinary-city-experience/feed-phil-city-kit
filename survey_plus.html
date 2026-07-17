@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Somebody Feed Phil — Trip Survey (Plus)</title>
+<!--
+  survey_plus.html — Phase 1 of the automation plan (see ../PLAN.md).
+
+  What this adds over survey.html:
+    1. "Generate kickoff prompt": merges your answers into the full
+       KICKOFF_PROMPT.md template, so the output is ready to paste as-is.
+    2. "Open in Claude": opens claude.ai with the prompt pre-filled
+       (via the ?q= URL parameter). The prompt is also copied to the
+       clipboard first, as a fallback if the URL gets truncated.
+    3. Optional "kit URL" field: if the kit lives on GitHub, the prompt
+       tells Claude where to fetch it — no manual attachment needed.
+    4. Autosave: answers persist in this browser (localStorage), so an
+       accidental tab close doesn't lose your input.
+    5. "Email to Mark" (added 2026-07-17): the concierge path for friends
+       and family — opens their email app with the survey pre-filled and
+       addressed to Mark, who runs the generation and sends back the
+       finished guide. No Claude account needed on their side.
+
+  Everything still runs locally in your browser; nothing is sent anywhere
+  until you open the Claude link yourself.
+-->
+<style>
+  :root{ --cream:#FAF5EC; --paper:#FFFDF8; --ink:#2B2118; --muted:#7A6C5D;
+    --tomato:#C0392B; --mustard:#E3A72F; --line:#E7DDCC; }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--cream); color:var(--ink); font:16px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:760px; margin:0 auto; padding:0 20px 60px;}
+  header{background:linear-gradient(160deg,#C0392B 0%,#A93226 55%,#8E2B20 100%); color:#FFF8EE; padding:36px 20px 28px; margin-bottom:8px;}
+  header .inner{max-width:760px; margin:0 auto;}
+  .kicker{font-size:13px; letter-spacing:.18em; text-transform:uppercase; opacity:.85;}
+  h1{font-family:Georgia,serif; font-size:clamp(26px,5vw,38px); margin:6px 0;}
+  .sub{opacity:.92; max-width:600px;}
+  fieldset{border:1px solid var(--line); border-radius:14px; background:var(--paper); margin:22px 0; padding:18px 20px 20px;}
+  legend{font-family:Georgia,serif; font-size:19px; padding:0 8px; color:var(--tomato);}
+  label{display:block; font-weight:600; font-size:14px; margin:14px 0 5px;}
+  input[type=text], textarea, select{
+    width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:8px;
+    font:inherit; background:#fff; color:var(--ink);
+  }
+  textarea{min-height:60px; resize:vertical;}
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media(max-width:600px){.row{grid-template-columns:1fr;}}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px;}
+  .chip{display:flex; align-items:center; gap:6px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 12px; font-size:13.5px; cursor:pointer;}
+  .chip input{margin:0;}
+  .hint{color:var(--muted); font-size:13px; margin-top:4px;}
+  .actions{position:sticky; bottom:0; background:var(--cream); padding:16px 0; border-top:1px solid var(--line); display:flex; gap:10px; flex-wrap:wrap;}
+  button{font:inherit; font-weight:700; font-size:14.5px; padding:11px 20px; border-radius:10px; border:1.5px solid var(--tomato); cursor:pointer;}
+  button.primary{background:var(--tomato); color:#fff;}
+  button.ghost{background:#fff; color:var(--tomato);}
+  button.gold{background:var(--mustard); border-color:var(--mustard); color:#2B2118;}
+  button.mail{background:#2E6B2E; border-color:#2E6B2E; color:#fff;}
+  /* "Two ways to use this" banner under the header */
+  .two-ways{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:18px 0 4px;}
+  @media(max-width:600px){.two-ways{grid-template-columns:1fr;}}
+  .way{border:1.5px solid var(--line); border-radius:12px; background:var(--paper); padding:12px 14px; font-size:14px;}
+  .way b{display:block; margin-bottom:3px;}
+  .way.mailway{border-color:#2E6B2E;}
+  .way.claudeway{border-color:var(--mustard);}
+  /* modal popup (used by the Email-to-Mark flow) */
+  .modal-overlay{position:fixed; inset:0; background:rgba(43,33,24,.55); display:none; align-items:center; justify-content:center; z-index:50; padding:20px;}
+  .modal-overlay.show{display:flex;}
+  .modal{background:var(--paper); border-radius:14px; max-width:440px; padding:22px 24px; box-shadow:0 12px 40px rgba(0,0,0,.3);}
+  .modal h2{font-family:Georgia,serif; color:var(--tomato); margin:0 0 10px; font-size:20px;}
+  .modal p{font-size:14.5px; margin:0 0 10px;}
+  .modal .modal-actions{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+  #output-wrap{display:none; margin-top:18px;}
+  #output{width:100%; min-height:340px; font:13px/1.5 ui-monospace,Menlo,Consolas,monospace; padding:14px; border-radius:10px; border:1px solid var(--line); background:#2B2118; color:#FBF7EF;}
+  .copied{color:#2E6B2E; font-weight:700; font-size:13.5px; margin-left:8px; opacity:0; transition:opacity .2s;}
+  .copied.show{opacity:1;}
+  footer{color:var(--muted); font-size:13px; text-align:center; padding:20px 0;}
+</style>
+</head>
+<body>
+<header><div class="inner">
+  <div class="kicker">Somebody Feed Phil · Trip Survey · Plus</div>
+  <h1>Tell us about the trip</h1>
+  <div class="sub">Answer what you can — skip the rest. Answers autosave in this browser.</div>
+</div></header>
+
+<div class="wrap">
+
+<!-- Two ways to use this form: self-serve via Claude, or concierge via email -->
+<div class="two-ways">
+  <div class="way mailway">
+    <b>✉ Easiest — Email to Mark</b>
+    Fill in the form, hit <i>Email to Mark</i>, and send. He'll generate your
+    personal city guide and email you back the PDF + interactive site. No
+    account or setup needed.
+  </div>
+  <div class="way claudeway">
+    <b>⚡ Do-it-yourself — Open in Claude</b>
+    Have a Claude account and the guide kit? <i>Open in Claude</i> pre-fills
+    the whole kickoff prompt and Claude builds the guide for you.
+  </div>
+</div>
+
+<form id="survey">
+
+  <fieldset>
+    <legend>1 · The basics</legend>
+    <div class="row">
+      <div>
+        <label for="city">City</label>
+        <select id="city" required>
+          <option value="" data-name="">— choose a city —</option>
+          <optgroup label="Season 1">
+            <option value="bangkok" data-name="Bangkok">Bangkok</option>
+            <option value="lisbon" data-name="Lisbon">Lisbon</option>
+            <option value="mexico-city" data-name="Mexico City">Mexico City</option>
+            <option value="new-orleans" data-name="New Orleans">New Orleans</option>
+            <option value="saigon" data-name="Saigon">Saigon</option>
+            <option value="tel-aviv" data-name="Tel Aviv">Tel Aviv</option>
+          </optgroup>
+          <optgroup label="Season 2">
+            <option value="buenos-aires" data-name="Buenos Aires">Buenos Aires</option>
+            <option value="cape-town" data-name="Cape Town">Cape Town</option>
+            <option value="copenhagen" data-name="Copenhagen">Copenhagen</option>
+            <option value="dublin" data-name="Dublin">Dublin</option>
+            <option value="new-york-city" data-name="New York City">New York City</option>
+            <option value="venice" data-name="Venice">Venice</option>
+          </optgroup>
+          <optgroup label="Season 3">
+            <option value="chicago" data-name="Chicago">Chicago</option>
+            <option value="london" data-name="London">London</option>
+            <option value="marrakesh" data-name="Marrakesh">Marrakesh</option>
+            <option value="montreal" data-name="Montreal">Montreal</option>
+            <option value="seoul" data-name="Seoul">Seoul</option>
+          </optgroup>
+          <optgroup label="Season 4">
+            <option value="hawaii" data-name="Hawaii">Hawaii</option>
+            <option value="mississippi-delta" data-name="Mississippi Delta">Mississippi Delta</option>
+            <option value="rio-de-janeiro" data-name="Rio de Janeiro">Rio de Janeiro</option>
+            <option value="san-francisco" data-name="San Francisco">San Francisco</option>
+            <option value="singapore" data-name="Singapore">Singapore</option>
+          </optgroup>
+          <optgroup label="Season 5">
+            <option value="helsinki" data-name="Helsinki">Helsinki</option>
+            <option value="madrid" data-name="Madrid">Madrid</option>
+            <option value="maine" data-name="Maine">Maine</option>
+            <option value="oaxaca" data-name="Oaxaca">Oaxaca</option>
+            <option value="portland-oregon" data-name="Portland, OR">Portland, OR</option>
+          </optgroup>
+          <optgroup label="Season 6">
+            <option value="austin" data-name="Austin">Austin</option>
+            <option value="croatia" data-name="Croatia">Croatia</option>
+            <option value="nashville" data-name="Nashville">Nashville</option>
+            <option value="philadelphia" data-name="Philadelphia">Philadelphia</option>
+            <option value="santiago" data-name="Santiago">Santiago</option>
+          </optgroup>
+          <optgroup label="Season 7">
+            <option value="dubai" data-name="Dubai">Dubai</option>
+            <option value="iceland" data-name="Iceland">Iceland</option>
+            <option value="kyoto" data-name="Kyoto">Kyoto</option>
+            <option value="mumbai" data-name="Mumbai">Mumbai</option>
+            <option value="orlando" data-name="Orlando">Orlando</option>
+            <option value="scotland" data-name="Scotland">Scotland</option>
+            <option value="taipei" data-name="Taipei">Taipei</option>
+            <option value="washington-dc" data-name="Washington, DC">Washington, DC</option>
+          </optgroup>
+          <optgroup label="Season 8">
+            <option value="amsterdam" data-name="Amsterdam">Amsterdam</option>
+            <option value="basque-country" data-name="Basque Country">Basque Country</option>
+            <option value="boston" data-name="Boston">Boston</option>
+            <option value="guatemala" data-name="Guatemala">Guatemala</option>
+            <option value="las-vegas" data-name="Las Vegas">Las Vegas</option>
+            <option value="manila" data-name="Manila">Manila</option>
+            <option value="sydney-adelaide" data-name="Sydney &amp; Adelaide">Sydney &amp; Adelaide</option>
+            <option value="tbilisi" data-name="Tbilisi">Tbilisi</option>
+          </optgroup>
+          <optgroup label="I'll Have What Phil's Having">
+            <option value="barcelona" data-name="Barcelona">Barcelona</option>
+            <option value="hongkong" data-name="Hong Kong">Hong Kong</option>
+            <option value="italy" data-name="Italy">Italy</option>
+            <option value="los-angeles" data-name="Los Angeles">Los Angeles</option>
+            <option value="paris" data-name="Paris">Paris</option>
+            <option value="tokyo" data-name="Tokyo">Tokyo</option>
+          </optgroup>
+        </select>
+        <div class="hint">One of Phil's 54 destinations — picking from the list locks in the exact URL slug both source sites use.</div>
+      </div>
+      <div>
+        <label for="dates">Dates of the trip</label>
+        <input type="text" id="dates" placeholder="e.g. 12–19 Oct 2026">
+      </div>
+    </div>
+    <label for="purpose">Purpose</label>
+    <select id="purpose">
+      <option value="">— choose —</option>
+      <option>Work trip with free evenings</option>
+      <option>Pure vacation</option>
+      <option>Mixed work / vacation</option>
+      <option>Other</option>
+    </select>
+    <label for="who">Who's travelling</label>
+    <input type="text" id="who" placeholder="e.g. me + my partner">
+    <label for="freetime">Free time you actually have</label>
+    <textarea id="freetime" placeholder="e.g. Friday night + Saturday free, Sunday afternoon possible"></textarea>
+  </fieldset>
+
+  <fieldset>
+    <legend>2 · Where you're staying</legend>
+    <label for="lodging">Lodging address (or neighbourhood if not booked)</label>
+    <input type="text" id="lodging" placeholder="Full address if you have it">
+    <label for="nearby">Anything nearby to factor in</label>
+    <input type="text" id="nearby" placeholder="conference venue, office, a friend's place...">
+  </fieldset>
+
+  <fieldset>
+    <legend>3 · Food &amp; drink</legend>
+    <label for="splurge">Splurge appetite</label>
+    <select id="splurge">
+      <option value="">— choose —</option>
+      <option>Happy to pay top euro for a bucket-list meal</option>
+      <option>Prefer to keep everything mid-range</option>
+      <option>One splurge + one friendly option per day (like the Madrid guide)</option>
+    </select>
+    <label for="cuisines">Dishes / cuisines you're chasing</label>
+    <textarea id="cuisines" placeholder="Anything specific you want to recreate from the show, or on your own list"></textarea>
+    <label for="diet">Dietary restrictions or dislikes</label>
+    <input type="text" id="diet" placeholder="e.g. no shellfish, vegetarian, nothing too spicy">
+    <label for="drinks">Drink preferences</label>
+    <input type="text" id="drinks" placeholder="wine, cocktails, local specialty, coffee culture, non-alcoholic...">
+  </fieldset>
+
+  <fieldset>
+    <legend>4 · Interests to weave in</legend>
+    <div class="chips" id="interest-chips">
+      <label class="chip"><input type="checkbox" value="Live music"> Live music</label>
+      <label class="chip"><input type="checkbox" value="Chess / games"> Chess / games</label>
+      <label class="chip"><input type="checkbox" value="Sports"> Sports</label>
+      <label class="chip"><input type="checkbox" value="Art / museums"> Art / museums</label>
+      <label class="chip"><input type="checkbox" value="Markets"> Markets</label>
+      <label class="chip"><input type="checkbox" value="Nature / parks"> Nature / parks</label>
+      <label class="chip"><input type="checkbox" value="Nightlife"> Nightlife</label>
+      <label class="chip"><input type="checkbox" value="History / architecture"> History / architecture</label>
+      <label class="chip"><input type="checkbox" value="Language practice"> Language practice</label>
+    </div>
+    <label for="interest-detail">Details on the above (genres, artists, teams, level...)</label>
+    <textarea id="interest-detail"></textarea>
+    <label for="other-interest">Anything else entirely</label>
+    <input type="text" id="other-interest">
+  </fieldset>
+
+  <fieldset>
+    <legend>5 · Atmosphere &amp; dealbreakers</legend>
+    <label for="likes">Likes</label>
+    <input type="text" id="likes" placeholder="relaxed vs buzzy, local vs polished, terraces...">
+    <label for="avoid">Not into</label>
+    <input type="text" id="avoid" placeholder="tourist traps, clubbing, crowds...">
+    <label for="donealready">Already done on a previous trip (skip these)</label>
+    <textarea id="donealready"></textarea>
+  </fieldset>
+
+  <fieldset>
+    <legend>6 · Logistics</legend>
+    <div class="row">
+      <div>
+        <label for="arrivetime">Target arrival time for evening plans</label>
+        <input type="text" id="arrivetime" placeholder="e.g. 19:00">
+      </div>
+      <div>
+        <label for="transport">How you like getting around</label>
+        <input type="text" id="transport" placeholder="public transit / walking / rideshare / mix">
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label for="budgettransport">Transport budget comfort</label>
+        <input type="text" id="budgettransport" placeholder="cheapest always / cabs when convenient">
+      </div>
+      <div>
+        <label for="mobility">Mobility considerations</label>
+        <input type="text" id="mobility" placeholder="lots of walking OK? stairs? luggage between stops?">
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>7 · Anything else</legend>
+    <textarea id="misc" placeholder="quirks, must-sees, an anniversary dinner, a flight time that constrains the last day..."></textarea>
+  </fieldset>
+
+  <fieldset>
+    <legend>8 · Kickoff options</legend>
+    <label for="kiturl">Kit URL (optional)</label>
+    <input type="text" id="kiturl" placeholder="e.g. https://github.com/you/feed-phil-city-kit — leave empty if you attach the kit or use a Claude Project">
+    <div class="hint">If the kit is on GitHub, the prompt will tell Claude where to fetch it. Otherwise it assumes the kit folder is attached to the chat or lives in your Claude Project.</div>
+  </fieldset>
+
+</form>
+
+<div class="actions">
+  <button class="mail" type="button" onclick="emailToMark()" title="Opens your email app with the survey pre-filled — Mark sends back the finished guide">✉ Email to Mark</button>
+  <button class="gold" type="button" onclick="openInClaude()" title="Requires a Claude account — pre-fills a new chat with the full kickoff prompt">Open in Claude ↗</button>
+  <button class="primary" type="button" onclick="showKickoff()">Generate kickoff prompt</button>
+  <button class="ghost" type="button" onclick="copyOut()">Copy <span class="copied" id="copied-flag">Copied ✓</span></button>
+  <button class="ghost" type="button" onclick="showSurvey()">Survey only</button>
+  <button class="ghost" type="button" onclick="downloadMd()">Download survey.md</button>
+</div>
+
+<div id="output-wrap">
+  <textarea id="output" readonly></textarea>
+</div>
+
+<footer>No data leaves this page until you click "Email to Mark" or "Open in Claude" yourself. Answers autosave in this browser only.</footer>
+</div>
+
+<!-- Email-to-Mark confirmation popup -->
+<div class="modal-overlay" id="mail-modal" onclick="if(event.target===this) closeMailModal()">
+  <div class="modal">
+    <h2>✉ Send your survey to Mark</h2>
+    <p>Your email app will open with your answers pre-filled and addressed
+       to Mark. Just hit <b>Send</b> — nothing else is needed.</p>
+    <p>Mark runs the guide generator and emails you back your personal city
+       guide: a clickable PDF and an interactive map site.</p>
+    <p style="color:var(--muted); font-size:13px;">Your answers were also
+       copied to the clipboard — if the email opens with an empty or cut-off
+       message, simply paste (Ctrl/Cmd+V) into it.</p>
+    <div class="modal-actions">
+      <button class="mail" type="button" onclick="openEmailApp()">Open my email app</button>
+      <button class="ghost" type="button" onclick="closeMailModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+function val(id){ return document.getElementById(id).value.trim(); }
+function checkedChips(){
+  return Array.from(document.querySelectorAll('#interest-chips input:checked')).map(c=>c.value);
+}
+function line(label, v){ return v ? `**${label}:** ${v}\n` : ''; }
+function cityInfo(){
+  const sel = document.getElementById('city');
+  const opt = sel.selectedOptions[0];
+  return { name: (opt && opt.dataset.name) || '', slug: sel.value };
+}
+
+/* ---------- survey markdown (same output as survey.html) ---------- */
+function buildSurveyMd(){
+  const interests = checkedChips();
+  const city = cityInfo();
+  const cityLine = city.slug ? `**City:** ${city.name} (source-site slug: \`${city.slug}\`)\n` : '';
+  return `# Trip Survey — ${city.name || '(city not set)'}
+
+## 1. The basics
+${cityLine}${line('Dates', val('dates'))}${line('Purpose', val('purpose'))}${line("Who's travelling", val('who'))}${line('Free time available', val('freetime'))}
+## 2. Where you're staying
+${line('Lodging', val('lodging'))}${line('Nearby to factor in', val('nearby'))}
+## 3. Food & drink
+${line('Splurge appetite', val('splurge'))}${line('Dishes / cuisines chasing', val('cuisines'))}${line('Dietary restrictions', val('diet'))}${line('Drink preferences', val('drinks'))}
+## 4. Interests
+${line('Selected', interests.join(', '))}${line('Details', val('interest-detail'))}${line('Other interest', val('other-interest'))}
+## 5. Atmosphere & dealbreakers
+${line('Likes', val('likes'))}${line('Not into', val('avoid'))}${line('Already done previously', val('donealready'))}
+## 6. Logistics
+${line('Target arrival time', val('arrivetime'))}${line('Getting around', val('transport'))}${line('Transport budget comfort', val('budgettransport'))}${line('Mobility considerations', val('mobility'))}
+## 7. Anything else
+${val('misc') || '(none)'}
+`;
+}
+
+/* ---------- kickoff prompt (KICKOFF_PROMPT.md template, filled in) ---------- */
+function buildKickoffPrompt(){
+  const city = cityInfo();
+  if(!city.slug){ alert('Choose a city first.'); return null; }
+  const kiturl = val('kiturl');
+
+  // How Claude gets the kit: fetch from a URL, or assume it is attached / in the Project.
+  const kitContext = kiturl
+    ? `The Feed Phil city-guide kit is at ${kiturl} — fetch it (PLAYBOOK.md, template/SCHEMA.md, builder/, example-madrid/) before starting.`
+    : `Use the attached \`feed-phil-city-kit\` folder (or the copy in this Project). If the kit isn't loaded: read PLAYBOOK.md first, then template/SCHEMA.md, then example-madrid/city.js and example-madrid/city_geo.json as a worked example. The builder scripts in builder/ never change per city — only the two data files do.`;
+
+  return `Use the Feed Phil city-guide template (see PLAYBOOK.md) to build me a trip guide for **${city.name}**.
+
+${kitContext}
+
+Pull venues from both source sites (slug already verified against CITIES.md):
+- https://www.philrosenthalworld.com/cities/${city.slug}
+- https://feedphil.com/${city.slug}
+
+Here's my survey:
+
+${buildSurveyMd()}
+Produce the same two deliverables as the reference Madrid guide (example-madrid/): a clickable PDF with an overview map and neighbourhood stroll maps, and a single-file interactive HTML site with live maps. Verify every venue's current address, phone, hours, and price before including it, and flag anything Phil's pages have wrong or out of date (closed, moved, renamed).`;
+}
+
+/* ---------- output actions ---------- */
+function setOutput(text){
+  document.getElementById('output').value = text;
+  document.getElementById('output-wrap').style.display = 'block';
+  document.getElementById('output-wrap').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function showSurvey(){ setOutput(buildSurveyMd()); }
+function showKickoff(){
+  const p = buildKickoffPrompt();
+  if(p) setOutput(p);
+}
+function copyOut(){
+  const out = document.getElementById('output');
+  if(!out.value) showKickoff();
+  if(!out.value) return;
+  navigator.clipboard.writeText(out.value).catch(()=>{ out.select(); document.execCommand('copy'); });
+  const flag = document.getElementById('copied-flag');
+  flag.classList.add('show');
+  setTimeout(()=>flag.classList.remove('show'), 1500);
+}
+function downloadMd(){
+  const blob = new Blob([buildSurveyMd()], {type:'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `survey-${cityInfo().slug || 'trip'}.md`;
+  a.click();
+}
+
+/* Open claude.ai with the prompt pre-filled. The prompt is copied to the
+   clipboard first: very long prompts can exceed practical URL limits, in
+   which case you just paste (Ctrl/Cmd+V) into the empty chat box. */
+function openInClaude(){
+  const p = buildKickoffPrompt();
+  if(!p) return;
+  setOutput(p);
+  navigator.clipboard.writeText(p).catch(()=>{});
+  window.open('https://claude.ai/new?q=' + encodeURIComponent(p), '_blank');
+}
+
+/* ---------- Email to Mark (concierge path for friends & family) ---------- */
+const MARK_EMAIL = 'AI4osint@proton.me';
+
+function emailToMark(){
+  const city = cityInfo();
+  if(!city.slug){ alert('Choose a city first — it tells Mark which guide to build.'); return; }
+  // Copy the survey to the clipboard up front: some email clients truncate
+  // long mailto: bodies, and the popup tells the user paste is the fallback.
+  navigator.clipboard.writeText(buildSurveyMd()).catch(()=>{});
+  document.getElementById('mail-modal').classList.add('show');
+}
+function closeMailModal(){
+  document.getElementById('mail-modal').classList.remove('show');
+}
+function openEmailApp(){
+  const city = cityInfo();
+  const subject = `Feed Phil city guide request — ${city.name}`;
+  const body = `Hi Mark,\n\nHere's my trip survey — please generate my ${city.name} guide!\n\n${buildSurveyMd()}`;
+  // mailto: hands off to whatever email app the visitor has configured.
+  window.location.href = `mailto:${MARK_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  closeMailModal();
+}
+
+/* ---------- autosave (this browser only) ---------- */
+const SAVE_KEY = 'feed-phil-survey-plus';
+const FIELD_IDS = ['city','dates','purpose','who','freetime','lodging','nearby','splurge',
+  'cuisines','diet','drinks','interest-detail','other-interest','likes','avoid',
+  'donealready','arrivetime','transport','budgettransport','mobility','misc','kiturl'];
+
+function saveForm(){
+  const data = {};
+  FIELD_IDS.forEach(id => data[id] = document.getElementById(id).value);
+  data._chips = checkedChips();
+  try{ localStorage.setItem(SAVE_KEY, JSON.stringify(data)); }catch(e){ /* private mode: skip */ }
+}
+function loadForm(){
+  let data;
+  try{ data = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); }catch(e){ return; }
+  if(!data) return;
+  FIELD_IDS.forEach(id => { if(data[id] !== undefined) document.getElementById(id).value = data[id]; });
+  (data._chips || []).forEach(v => {
+    const box = document.querySelector(`#interest-chips input[value="${v}"]`);
+    if(box) box.checked = true;
+  });
+}
+document.getElementById('survey').addEventListener('input', saveForm);
+loadForm();
+</script>
+</body>
+</html>
